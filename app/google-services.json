@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "821703552552",
+    "firebase_url": "https://gym-manager-2d511.firebaseio.com",
+    "project_id": "gym-manager-2d511",
+    "storage_bucket": "gym-manager-2d511.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821703552552:android:1f162f14abbad9f9874f1d",
+        "android_client_info": {
+          "package_name": "com.example.gymmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "821703552552-rcnp7c1jata4fgrgpr5dmfo5nscro0i7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNuR3uznWCevdw2s0tMNGM2bwpbVTwWe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "821703552552-rcnp7c1jata4fgrgpr5dmfo5nscro0i7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

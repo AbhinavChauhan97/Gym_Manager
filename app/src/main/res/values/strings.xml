@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Gym Manager</string>
+    <string name="add_members_description">Add New Member</string>
+    <string name="search">Search</string>
+    <string name="sort">Sort</string>
+    <string name="members">Members</string>
+    <string name="records">Fee Records</string>
+    <string name="more">More</string>
+    <string name="call">Call</string>
+    <string name="message">Message</string>
+    <string name="click_photo">Click photo of this member</string>
+</resources>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.gymmanager.viewmodel.AddNewMemberFragmentViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        tools:context=".view.AddMemberFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/image"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_max="270dp"
+            app:layout_constraintHeight_max="270dp"
+            android:elevation="15dp"
+            android:src="@drawable/ic_baseline_account_circle_24"
+            android:imageUri="@{viewModel.imageUri}"
+            app:layout_constraintBottom_toTopOf="@id/img_guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/clickImageButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_max="60dp"
+            app:layout_constraintHeight_max="60dp"
+            android:elevation="16dp"
+            android:background="@drawable/camera_button_icon"
+            android:src="@drawable/ic_baseline_photo_camera_24"
+            app:layout_constraintStart_toStartOf="@id/image"
+            app:layout_constraintTop_toTopOf="@id/image"
+            app:layout_constraintBottom_toBottomOf="@id/image"
+            app:layout_constraintEnd_toEndOf="@id/image"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintVertical_bias="1"/>
+
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/img_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5"/>
+
+        <com.example.gymmanager.view.BorderedCardView
+            android:id="@+id/name_cardview"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="15dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/phone_cardview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_guideline">
+            <com.example.gymmanager.view.supercooledittext.SupercoolEditText
+                android:id="@+id/name"
+                android:layout_marginStart="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="@={viewModel.member.name}"
+                app:validatorRegex="[a-zA-Z]+"
+                app:validationErrorMessage="invalid input" />
+        </com.example.gymmanager.view.BorderedCardView>
+
+       <com.example.gymmanager.view.BorderedCardView
+           android:id="@+id/phone_cardview"
+           android:layout_width="0dp"
+           android:layout_height="50dp"
+           android:layout_marginStart="2dp"
+           android:layout_marginEnd="2dp"
+           app:cardCornerRadius="25dp"
+           app:cardElevation="15dp"
+           app:cardBackgroundColor="@color/white"
+           app:layout_constraintTop_toBottomOf="@id/name_cardview"
+           app:layout_constraintBottom_toTopOf="@id/address_cardview"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent">
+           <com.example.gymmanager.view.supercooledittext.SupercoolEditText
+               android:id="@+id/phone"
+               android:layout_marginStart="5dp"
+               android:layout_height="50dp"
+               android:layout_width="match_parent"
+               android:text="@={viewModel.member.phone}"
+               app:layout_constraintTop_toBottomOf="@id/name"
+               app:validatorRegex="[7-9][0-9]{9}" />
+       </com.example.gymmanager.view.BorderedCardView>
+
+
+        <com.example.gymmanager.view.BorderedCardView
+            android:id="@+id/address_cardview"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            app:cardElevation="15dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="25dp"
+            app:layout_constraintBottom_toTopOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/phone_cardview">
+
+        <com.example.gymmanager.view.supercooledittext.SupercoolEditText
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:text="@={viewModel.member.address}"
+             />
+        </com.example.gymmanager.view.BorderedCardView>
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_member_FAB"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:contentDescription="@string/add_members_description"
+            app:backgroundTint="@android:color/holo_red_dark"
+            android:src="@drawable/ic_baseline_clear_24"
+            android:onClick="@{(fab) -> viewModel.addMember()}"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

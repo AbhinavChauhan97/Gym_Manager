@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/image"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:elevation="15dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintBottom_toTopOf="@id/name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:elevation="16dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_baseline_photo_camera_24"
+            android:background="@drawable/camera_button_icon"
+            app:layout_constraintEnd_toEndOf="@id/image"
+            app:layout_constraintBottom_toBottomOf="@id/image"
+            android:contentDescription="@string/click_photo" />
+
+        <me.omidh.ripplevalidatoredittext.RippleValidatorEditText
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="@color/purple_200"
+            android:elevation="10dp"
+            app:layout_constraintBottom_toTopOf="@id/phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image"
+            app:rve_backgroundColor="@color/purple_200"
+            app:rve_editTextColor="@color/purple_200" />
+
+        <me.omidh.ripplevalidatoredittext.RippleValidatorEditText
+            android:id="@+id/phone"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="@color/purple_200"
+            android:elevation="10dp"
+            app:layout_constraintBottom_toTopOf="@id/address"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            app:rve_backgroundColor="@color/purple_200"
+            app:rve_editTextColor="@color/purple_200" />
+
+        <me.omidh.ripplevalidatoredittext.RippleValidatorEditText
+            android:id="@+id/address"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="@color/purple_200"
+            android:elevation="10dp"
+            app:layout_constraintBottom_toTopOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/phone"
+            app:rve_backgroundColor="@color/purple_200"
+            app:rve_editTextColor="@color/purple_200">
+        </me.omidh.ripplevalidatoredittext.RippleValidatorEditText>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.85" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_baseline_check_24"
+            android:contentDescription="@string/add_members_description"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.95" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
