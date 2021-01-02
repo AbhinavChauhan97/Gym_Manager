@@ -5,42 +5,40 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
+import coil.load
 import com.example.gymmanager.R
-import com.example.gymmanager.databinding.AddNewMemberBinding
-import com.example.gymmanager.util.compressAndScaleImage
-import com.example.gymmanager.util.compressImage
-import com.example.gymmanager.util.createUriForImageFile
-import com.example.gymmanager.util.resizeImage
-import com.example.gymmanager.view.supercooledittext.SupercoolEditText
+import com.example.gymmanager.databinding.FragmentAddNewMemberBinding
+import com.example.gymmanager.util.*
+import com.example.gymmanager.view.enabled_disabled_behaviour_accepter_floating_action_button.AddingFABEnabledDisabledBehaviour
+import com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
+import com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditTextGroup
 import com.example.gymmanager.viewmodel.AddNewMemberFragmentViewModel
+import com.github.jorgecastilloprz.listeners.FABProgressListener
+import kotlinx.coroutines.*
 
 
-class AddMemberFragment : Fragment(R.layout.add_new_member) {
+class AddMemberFragment : Fragment(R.layout.fragment_add_new_member) {
 
     private lateinit var viewModel: AddNewMemberFragmentViewModel
-    lateinit var binding: AddNewMemberBinding
-
+    lateinit var binding: FragmentAddNewMemberBinding
 
     private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-
-        if (it == true) {
-            //compressImage(viewModel.member.id,requireActivity())
-            viewModel.imageTaken = true
+        if (it) {
+            viewModel.imageClicked = true
             binding.image.setImageURI(null)
-            val bitmap = compressAndScaleImage(requireActivity(),viewModel.member.id,binding.image.height,binding.image.width)
-            binding.image.setImageBitmap(bitmap)
-
-           /* Glide.with(this)
-                .load(viewModel.imageUri)
-                .override(binding.image.width, binding.image.height)
-                .centerCrop()
-                .into(binding.image)*/
+            binding.image.load(viewModel.imageUri)
         }
     }
 
@@ -48,71 +46,67 @@ class AddMemberFragment : Fragment(R.layout.add_new_member) {
 
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddNewMemberFragmentViewModel::class.java)
-        binding = AddNewMemberBinding.bind(view)
+        binding = FragmentAddNewMemberBinding.bind(view)
         binding.viewModel = viewModel
+        binding.fragment = this
         binding.lifecycleOwner = this
 
-        binding.name.validationStateChangeListener =
-            object : SupercoolEditText.ValidationStateChangeListener {
-                override fun onValidationStateChanged(valid: Boolean) {
-                    viewModel.memberNameIsValid.value = valid
-                    if (valid) binding.nameCardview.setBorderColor(Color.GREEN) else binding.nameCardview.setBorderColor(Color.RED)
-                    fabReact()
-                }
-            }
+        binding.name.addValidationChangeListener(binding.nameCardview)
+        binding.phone.addValidationChangeListener(binding.phoneCardview)
+        binding.address.addValidationChangeListener(binding.addressCardview)
+        binding.addMemberFAB.fabEnabledDisabledBehaviour =
+            AddingFABEnabledDisabledBehaviour(binding.addMemberFAB)
+        binding.addMemberFAB.setOnClickListener { addMember() }
+        binding.addMemberFAB.isEnabled = false
 
+        ValidationNotifierEditTextGroup
+            .createGroupOf(binding.name, binding.phone, binding.address)
+            .setValidationListenerOnGroup(
+                object : ValidationNotifierEditTextGroup.ValidationEditTextGroupValidationListener {
+                    override fun onAllBecomeValid() {
+                        binding.addMemberFAB.isEnabled = true
+                    }
 
-        binding.phone.validationStateChangeListener =
-            object : SupercoolEditText.ValidationStateChangeListener {
-                override fun onValidationStateChanged(valid: Boolean) {
-                    viewModel.memberPhoneIsValid.value = valid
-                    if (valid) binding.phoneCardview.setBorderColor(Color.GREEN) else binding.phoneCardview.setBorderColor(Color.RED)
-                    fabReact()
-                }
-            }
+                    override fun onAnyBecomeInvalid(validationNotifierEditText: ValidationNotifierEditText) {
+                        binding.addMemberFAB.isEnabled = false
+                    }
+                })
 
-        binding.address.validationStateChangeListener =
-            object : SupercoolEditText.ValidationStateChangeListener {
-                override fun onValidationStateChanged(valid: Boolean) {
-                    viewModel.memberAddressIsValid.value = valid
-                    if (valid) binding.addressCardview.setBorderColor(Color.GREEN) else binding.addressCardview.setBorderColor(Color.RED)
-                    fabReact()
-                }
-            }
-
-        binding.clickImageButton.setOnClickListener {
-            if(viewModel.imageUri == null) {
-                viewModel.imageUri = createUriForImageFile(requireActivity(), viewModel.member.id)
-            }
-            cameraLauncher.launch(viewModel.imageUri)
-        }
     }
 
+    fun launchCamera() {
+        if (viewModel.imageUri == null) {
+            viewModel.imageUri = createUriForImageFile("${viewModel.newMember.id}.jpg")
+        }
+        cameraLauncher.launch(viewModel.imageUri)
+    }
 
-    private fun fabReact() {
-        if (viewModel.isMemberDetailsValid()) {
-            binding.addMemberFAB.apply {
-                backgroundTintList = ColorStateList.valueOf(Color.GREEN)
-                isClickable = true
-                setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireActivity(),
-                        R.drawable.ic_baseline_check_24
-                    )
-                )
-            }
-        } else {
-            binding.addMemberFAB.apply {
-                backgroundTintList = ColorStateList.valueOf(Color.RED)
-                isClickable = false
-                setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireActivity(),
-                        R.drawable.ic_baseline_clear_24
-                    )
-                )
+    private fun addMember() {
+        binding.fabProgressCircle.show()
+        binding.fabProgressCircle.attachListener {
+            val action = AddMemberFragmentDirections.actionAddMemberFragmentToMainFragment()
+            findNavController().navigate(action)
+        }
+        viewModel.viewModelScope.launch {
+            viewModel.isMemberSaved = viewModel.addMember()
+            if (viewModel.isMemberSaved) {
+                binding.fabProgressCircle.beginFinalAnimation()
+            } else {
+                Toast.makeText(
+                    this@AddMemberFragment.requireActivity(),
+                    getString(R.string.failed_adding_member),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        GlobalScope.launch {
+            if (viewModel.imageClicked && !viewModel.isMemberSaved) {
+                deleteImage("${viewModel.newMember.id}.jpg")
+            }
+        }
+    }
 }

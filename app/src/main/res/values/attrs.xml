@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="SupercoolEditText">
+    <declare-styleable name="ValidationNotifierEditText">
         <attr name="validatorRegex" format="string"/>
         <attr name="endIcon" format="reference"/>
         <attr name="validationErrorMessage" format="string"/>
         <attr name="textColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="BorderedCardView">
+        <attr name="borderColor" format="color"/>
     </declare-styleable>
 </resources>

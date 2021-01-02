@@ -5,22 +5,43 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.View
 import androidx.cardview.widget.CardView
+import androidx.core.view.children
+import com.example.gymmanager.R
+import com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
 
-class BorderedCardView(context: Context, attributeSet: AttributeSet? = null) : CardView(context,attributeSet) {
+class BorderedCardView(context: Context, attributeSet: AttributeSet? = null) : CardView(context,attributeSet),ValidationNotifierEditText.ValidationChangeListener {
 
+    private var borderColor:Int = Color.RED
+        set(value) {
+        field = value
+        paint.color = value
+        invalidate()
+    }
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.RED
+        color = borderColor
         strokeWidth = 10f
         style = Paint.Style.STROKE
     }
 
-    fun setBorderColor(color:Int){
-        paint.color = color
-        invalidate()
-    }
+   init {
+       val ta = context.obtainStyledAttributes(attributeSet, R.styleable.BorderedCardView,0,0)
+       borderColor = ta.getColor(R.styleable.BorderedCardView_borderColor,Color.RED)
+       ta.recycle()
+   }
+
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.drawRoundRect(0f,0f,width.toFloat(),height.toFloat(),radius,radius,paint)
     }
+
+    override fun onBecomeValid(validationNotifierEditText: ValidationNotifierEditText) {
+        borderColor = Color.GREEN
+    }
+
+    override fun onBecomeInvalid(validationNotifierEditText: ValidationNotifierEditText) {
+        borderColor = Color.RED
+    }
+
 }

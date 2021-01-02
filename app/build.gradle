@@ -42,17 +42,23 @@ android {
 
 dependencies {
 
-    implementation 'com.google.firebase:firebase-storage:19.2.0'
-    def nav_version = "2.3.1"
+    implementation 'com.google.firebase:firebase-storage-ktx:19.2.1'
+    def nav_version = "2.3.2"
+    // Firestore FirebaseUI Library
+    implementation 'com.firebaseui:firebase-ui-firestore:5.0.0'
+
+    // Paging Library
+    implementation 'android.arch.paging:runtime:1.0.1'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-    implementation "androidx.navigation:navigation-fragment:$nav_version"
-    implementation "androidx.navigation:navigation-ui:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
-    implementation "androidx.navigation:navigation-compose:1.0.0-alpha02"
+    implementation "androidx.navigation:navigation-compose:1.0.0-alpha04"
     implementation 'me.omidh:rvelib:0.8.01'
     implementation  'com.fxn769:bubbletabbar:1.0.5'
     implementation "android.arch.lifecycle:extensions:1.1.1"
@@ -64,8 +70,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.google.firebase:firebase-firestore:22.0.0'
-    implementation 'id.zelory:compressor:3.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:22.0.1'
+    implementation("io.coil-kt:coil:1.1.0")
+    implementation("androidx.core:core-ktx:1.5.0-alpha05")
+    implementation 'com.github.jorgecastilloprz:fabprogresscircle:1.01@aar'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.1'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

@@ -1,91 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.gymmanager.view.MemberDetailsFragment" />
+        <variable
+            name="viewModel"
+            type="com.example.gymmanager.viewmodel.MemberDetailsFragmentViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        tools:context=".view.MemberDetailsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/image"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:elevation="15dp"
-            android:src="@mipmap/ic_launcher"
-            app:layout_constraintBottom_toTopOf="@id/name"
+            image="@{viewModel.conciseMember.image}"
+            app:layout_constraintBottom_toTopOf="@id/img_guideline"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_max="270dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="270dp" />
 
         <ImageButton
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:elevation="16dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:src="@drawable/ic_baseline_photo_camera_24"
+            android:id="@+id/clickImageButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@drawable/camera_button_icon"
-            app:layout_constraintEnd_toEndOf="@id/image"
+            android:elevation="16dp"
+            android:src="@drawable/ic_baseline_photo_camera_24"
             app:layout_constraintBottom_toBottomOf="@id/image"
-            android:contentDescription="@string/click_photo" />
+            app:layout_constraintEnd_toEndOf="@id/image"
+            app:layout_constraintHeight_max="60dp"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="@id/image"
+            app:layout_constraintTop_toTopOf="@id/image"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintWidth_max="60dp" />
 
-        <me.omidh.ripplevalidatoredittext.RippleValidatorEditText
-            android:id="@+id/name"
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/img_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <com.example.gymmanager.view.BorderedCardView
+            android:id="@+id/name_cardview"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:background="@color/purple_200"
-            android:elevation="10dp"
-            app:layout_constraintBottom_toTopOf="@id/phone"
+            android:layout_height="50dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="15dp"
+            app:layout_constraintBottom_toTopOf="@id/phone_cardview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image"
-            app:rve_backgroundColor="@color/purple_200"
-            app:rve_editTextColor="@color/purple_200" />
+            app:layout_constraintTop_toBottomOf="@id/img_guideline">
 
-        <me.omidh.ripplevalidatoredittext.RippleValidatorEditText
-            android:id="@+id/phone"
+            <LinearLayout
+                android:id="@+id/linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
+                    android:id="@+id/name"
+                    android:layout_width="0dp"
+                    android:text="@={viewModel.conciseMember.name}"
+                    android:layout_height="50dp"
+                    android:enabled="false"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.9"
+                    app:validationErrorMessage="invalid input"
+                    app:validatorRegex="[a-zA-Z]+" />
+
+                <com.example.gymmanager.view.MemberDetailsEditButton
+                    android:id="@+id/name_edit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+
+                    android:src="@drawable/ic_baseline_edit_24"
+                    />
+            </LinearLayout>
+        </com.example.gymmanager.view.BorderedCardView>
+
+        <com.example.gymmanager.view.BorderedCardView
+            android:id="@+id/phone_cardview"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:background="@color/purple_200"
-            android:elevation="10dp"
-            app:layout_constraintBottom_toTopOf="@id/address"
+            android:layout_height="50dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="15dp"
+            app:layout_constraintBottom_toTopOf="@id/address_cardview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name"
-            app:rve_backgroundColor="@color/purple_200"
-            app:rve_editTextColor="@color/purple_200" />
+            app:layout_constraintTop_toBottomOf="@id/name_cardview">
 
-        <me.omidh.ripplevalidatoredittext.RippleValidatorEditText
-            android:id="@+id/address"
+            <LinearLayout
+                android:id="@+id/linear2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
+                    android:id="@+id/phone"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:text="@={viewModel.memberDetails.phone}"
+                    android:enabled="false"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.9"
+                    app:layout_constraintTop_toBottomOf="@id/name"
+                    app:validatorRegex="[7-9][0-9]{9}" />
+
+                <com.example.gymmanager.view.MemberDetailsEditButton
+                    android:id="@+id/phone_edit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+
+                    android:src="@drawable/ic_baseline_edit_24"/>
+            </LinearLayout>
+        </com.example.gymmanager.view.BorderedCardView>
+
+
+        <com.example.gymmanager.view.BorderedCardView
+            android:id="@+id/address_cardview"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:background="@color/purple_200"
-            android:elevation="10dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="15dp"
             app:layout_constraintBottom_toTopOf="@id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/phone"
-            app:rve_backgroundColor="@color/purple_200"
-            app:rve_editTextColor="@color/purple_200">
-        </me.omidh.ripplevalidatoredittext.RippleValidatorEditText>
+            app:layout_constraintTop_toBottomOf="@id/phone_cardview">
+
+            <LinearLayout
+                android:id="@+id/linear3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
+                    android:id="@+id/address"
+                    android:text="@={viewModel.memberDetails.address}"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:enabled="false"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.9" />
+                <com.example.gymmanager.view.MemberDetailsEditButton
+                    android:id="@+id/address_edit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+
+                    android:src="@drawable/ic_baseline_edit_24"/>
+            </LinearLayout>
+        </com.example.gymmanager.view.BorderedCardView>
+
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.85" />
+            app:layout_constraintGuide_percent="0.8" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+       <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_member_FAB"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:src="@drawable/ic_baseline_check_24"
+            android:layout_marginTop="30dp"
             android:contentDescription="@string/add_members_description"
-            app:layout_constraintTop_toBottomOf="@id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.95" />
+            app:layout_constraintTop_toBottomOf="@id/guideline" />-->
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

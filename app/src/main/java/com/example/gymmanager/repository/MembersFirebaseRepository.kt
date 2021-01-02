@@ -1,52 +1,70 @@
 package com.example.gymmanager.repository
 
-import android.content.Context
-import android.media.MediaPlayer
 import android.net.Uri
 import android.util.Log
-import androidx.core.net.toFile
-import com.example.gymmanager.model.DetailedMember
-import com.example.gymmanager.util.compressImage
-import com.example.gymmanager.view.memberviewholderview.Member
-import com.google.android.play.core.tasks.OnCompleteListener
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
+import com.example.gymmanager.model.*
+import com.google.android.gms.tasks.Task
+import com.google.android.play.core.tasks.Tasks
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
-import kotlin.random.Random
+import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.tasks.asDeferred
+import kotlinx.coroutines.tasks.await
+import java.io.File
 
-fun getMembers(){
-
-
+interface DocumentReferenceProvider {
+    val documentReference: DocumentReference
 }
 
-fun getMember(id:Int){
+suspend fun downloadMember(id: String): DocumentSnapshot {
 
-        val name = FirebaseFirestore.getInstance()
-        .collection("users")
-        .document(id.toString())
+    val documentSnapShotTask = FirebaseFirestore.getInstance()
+        .collection("d_members")
+        .document(id)
         .get()
+    return documentSnapShotTask.await()
 }
 
-fun addMemberToFirestoreDatabase(member: DetailedMember,imageUri: Uri? = null){
-        FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(member.id)
-                .set(member).addOnFailureListener { Log.d("log",it.toString()) }
-                .addOnSuccessListener {
-                        if(imageUri != null) {
-                                Log.d("log","uploading file")
-                                FirebaseStorage.getInstance().getReference(member.id).putFile(imageUri).
-                                        addOnCompleteListener {
+suspend fun downloadImage(imageName: String, downloadDestinationFile: File): Boolean {
+    val downloadTask = FirebaseStorage.getInstance()
+        .getReference(imageName)
+        .getFile(downloadDestinationFile)
+    downloadTask.await()
+    return downloadTask.isSuccessful
+}
 
-                                                if(it.isCanceled ){
-                                                        Log.d("log",it.exception.toString())
-                                                }
-                                                if(it.isSuccessful){
-                                                        Log.d("log","successful")
-                                                }
-                                        }
-                        }
+fun getConciseMembersReference(): CollectionReference {
+    return FirebaseFirestore.getInstance()
+        .collection("c_members")
+}
 
-                }
+suspend fun addToFireStore(vararg documentReferenceProvider: DocumentReferenceProvider): Boolean {
+    val memberSetterTask = FirebaseFirestore.getInstance().runBatch {
+        documentReferenceProvider.forEach {
+            it.documentReference.set(it)
+        }
+    }
+    memberSetterTask.await()
+    return memberSetterTask.isSuccessful
+}
+
+fun addNewMember(member: DocumentReferenceProvider) {
+    member.documentReference.set(member)
+}
+
+fun addNewMemberDetails(memberDetails: DocumentReferenceProvider) {
+    // FirebaseFirestore.getInstance().collection("d_members").document(memberDetails.id).set(memberDetails)
+    memberDetails.documentReference.set(memberDetails)
+
+}
+
+suspend fun addImageToFirebaseStorage(
+    imageName: String,
+    byteArray: ByteArray
+): UploadTask.TaskSnapshot {
+
+    return FirebaseStorage.getInstance()
+        .getReference(imageName)
+        .putBytes(byteArray)
+        .await()
 }

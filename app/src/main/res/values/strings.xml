@@ -9,4 +9,8 @@
     <string name="call">Call</string>
     <string name="message">Message</string>
     <string name="click_photo">Click photo of this member</string>
+    <string name="name">NAME</string>
+    <string name="phone">PHONE</string>
+    <string name="address">ADDRESS</string>
+    <string name="failed_adding_member">couldn\'t add member please try again </string>
 </resources>

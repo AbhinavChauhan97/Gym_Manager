@@ -7,6 +7,9 @@
         <variable
             name="viewModel"
             type="com.example.gymmanager.viewmodel.AddNewMemberFragmentViewModel" />
+        <variable
+            name="fragment"
+            type="com.example.gymmanager.view.AddMemberFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,8 +24,7 @@
             app:layout_constraintWidth_max="270dp"
             app:layout_constraintHeight_max="270dp"
             android:elevation="15dp"
-            android:src="@drawable/ic_baseline_account_circle_24"
-            android:imageUri="@{viewModel.imageUri}"
+            imageUri="@{viewModel.imageUri}"
             app:layout_constraintBottom_toTopOf="@id/img_guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +37,7 @@
             app:layout_constraintWidth_max="60dp"
             app:layout_constraintHeight_max="60dp"
             android:elevation="16dp"
+            android:onClick="@{v -> fragment.launchCamera()}"
             android:background="@drawable/camera_button_icon"
             android:src="@drawable/ic_baseline_photo_camera_24"
             app:layout_constraintStart_toStartOf="@id/image"
@@ -60,18 +63,21 @@
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
             app:cardCornerRadius="25dp"
-            app:cardElevation="15dp"
+            app:cardElevation="12dp"
+            app:borderColor="@color/cardView_border_red"
             app:cardBackgroundColor="@color/white"
             app:layout_constraintBottom_toTopOf="@id/phone_cardview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_guideline">
-            <com.example.gymmanager.view.supercooledittext.SupercoolEditText
+            <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
                 android:id="@+id/name"
                 android:layout_marginStart="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="@={viewModel.member.name}"
+                android:hint="@string/name"
+                android:textColorHint="@android:color/darker_gray"
+                android:text="@={viewModel.newMember.name}"
                 app:validatorRegex="[a-zA-Z]+"
                 app:validationErrorMessage="invalid input" />
         </com.example.gymmanager.view.BorderedCardView>
@@ -83,18 +89,21 @@
            android:layout_marginStart="2dp"
            android:layout_marginEnd="2dp"
            app:cardCornerRadius="25dp"
-           app:cardElevation="15dp"
+           app:cardElevation="12dp"
+           app:borderColor="@color/cardView_border_red"
            app:cardBackgroundColor="@color/white"
            app:layout_constraintTop_toBottomOf="@id/name_cardview"
            app:layout_constraintBottom_toTopOf="@id/address_cardview"
            app:layout_constraintEnd_toEndOf="parent"
            app:layout_constraintStart_toStartOf="parent">
-           <com.example.gymmanager.view.supercooledittext.SupercoolEditText
+           <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
                android:id="@+id/phone"
                android:layout_marginStart="5dp"
                android:layout_height="50dp"
                android:layout_width="match_parent"
-               android:text="@={viewModel.member.phone}"
+               android:hint="@string/phone"
+               android:textColorHint="@android:color/darker_gray"
+               android:text="@={viewModel.newMemberDetails.phone}"
                app:layout_constraintTop_toBottomOf="@id/name"
                app:validatorRegex="[7-9][0-9]{9}" />
        </com.example.gymmanager.view.BorderedCardView>
@@ -106,21 +115,24 @@
             android:layout_height="50dp"
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
-            app:cardElevation="15dp"
+            app:cardElevation="12dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="25dp"
+            app:borderColor="@color/cardView_border_green"
             app:layout_constraintBottom_toTopOf="@id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/phone_cardview">
 
-        <com.example.gymmanager.view.supercooledittext.SupercoolEditText
+        <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
             android:id="@+id/address"
+            android:text="@={viewModel.newMemberDetails.address}"
+            android:hint="@string/address"
+            android:textColorHint="@android:color/darker_gray"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="5dp"
-            android:text="@={viewModel.member.address}"
-             />
+            />
         </com.example.gymmanager.view.BorderedCardView>
 
 
@@ -131,19 +143,23 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.8" />
 
+<com.github.jorgecastilloprz.FABProgressCircle
+    android:id="@+id/fab_progress_circle"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/guideline"
+    app:layout_constraintStart_toStartOf="parent"
+    android:layout_marginTop="30dp">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.example.gymmanager.view.enabled_disabled_behaviour_accepter_floating_action_button.EnabledDisabledBehaviourFloatingActionButton
             android:id="@+id/add_member_FAB"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:contentDescription="@string/add_members_description"
-            app:backgroundTint="@android:color/holo_red_dark"
-            android:src="@drawable/ic_baseline_clear_24"
-            android:onClick="@{(fab) -> viewModel.addMember()}"
-            android:layout_marginTop="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guideline"
-            app:layout_constraintStart_toStartOf="parent" />
+            />
+
+</com.github.jorgecastilloprz.FABProgressCircle>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
