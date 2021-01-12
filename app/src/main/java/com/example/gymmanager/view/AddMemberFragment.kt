@@ -82,15 +82,14 @@ class AddMemberFragment : Fragment(R.layout.fragment_add_new_member) {
     }
 
     private fun addMember() {
+        binding.addMemberFAB.isClickable = false
         binding.fabProgressCircle.show()
-        binding.fabProgressCircle.attachListener {
-            val action = AddMemberFragmentDirections.actionAddMemberFragmentToMainFragment()
-            findNavController().navigate(action)
-        }
+
         viewModel.viewModelScope.launch {
             viewModel.isMemberSaved = viewModel.addMember()
             if (viewModel.isMemberSaved) {
-                binding.fabProgressCircle.beginFinalAnimation()
+                val action = AddMemberFragmentDirections.actionAddMemberFragmentToMainFragment()
+                findNavController().navigate(action)
             } else {
                 Toast.makeText(
                     this@AddMemberFragment.requireActivity(),
@@ -98,6 +97,8 @@ class AddMemberFragment : Fragment(R.layout.fragment_add_new_member) {
                     Toast.LENGTH_LONG
                 ).show()
             }
+            binding.fabProgressCircle.hide()
+            binding.addMemberFAB.isClickable = true
         }
     }
 

@@ -43,7 +43,7 @@ class AddNewMemberFragmentViewModel : ViewModel() {
         var isImageUploaded = false
         if (imageClicked) {
             newMember.image = "$newMemberId.jpg"
-            isImageUploaded = saveImage(newMember.image!!)
+            isImageUploaded = saveImage(newMember.image!!)  // improvement
         }
         val isMemberDataAdded: Boolean = addToFireStore(newMember, newMemberDetails)
         if ((imageClicked && isImageUploaded) || isMemberDataAdded) {

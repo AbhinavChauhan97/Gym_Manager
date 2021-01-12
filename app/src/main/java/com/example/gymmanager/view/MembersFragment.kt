@@ -1,6 +1,7 @@
 package com.example.gymmanager.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -14,13 +15,14 @@ import com.example.gymmanager.viewmodel.MembersFragmentViewModel
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
 
 
-class MembersFragment : Fragment(R.layout.fragment_members){
+class MembersFragment : Fragment(R.layout.fragment_members),MainFragment.VisibilityNotifier{
 
     private lateinit var membersFragmentViewModel: MembersFragmentViewModel
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("log","members fragment created")
         membersFragmentViewModel = ViewModelProviders.of(this).get(MembersFragmentViewModel::class.java)
         val binding = FragmentMembersBinding.bind(view)
         val options = FirestorePagingOptions.Builder<ConciseMember>()
@@ -32,6 +34,15 @@ class MembersFragment : Fragment(R.layout.fragment_members){
         binding.membersRecyclerview.adapter = MembersRecyclerViewAdapter(options)
         binding.membersRecyclerview.addItemDecoration(DividerItemDecoration(requireActivity(),LinearLayoutManager.VERTICAL))
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("log","members fragment is visible")
+    }
+
+    override fun onVisible() {
+        TODO("Not yet implemented")
     }
 
 }

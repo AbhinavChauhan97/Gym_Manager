@@ -78,6 +78,7 @@
                     android:id="@+id/name"
                     android:layout_width="0dp"
                     android:text="@={viewModel.conciseMember.name}"
+                    android:textColor="@color/black"
                     android:layout_height="50dp"
                     android:enabled="false"
                     android:layout_marginStart="5dp"
@@ -122,6 +123,7 @@
                     android:layout_height="50dp"
                     android:text="@={viewModel.memberDetails.phone}"
                     android:enabled="false"
+                    android:textColor="@color/black"
                     android:layout_marginStart="5dp"
                     android:layout_weight="0.9"
                     app:layout_constraintTop_toBottomOf="@id/name"
@@ -163,6 +165,7 @@
                     android:text="@={viewModel.memberDetails.address}"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:textColor="@color/black"
                     android:enabled="false"
                     android:layout_marginStart="5dp"
                     android:layout_weight="0.9" />
@@ -185,16 +188,67 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.8" />
 
-
-       <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_member_FAB"
+     <com.github.jorgecastilloprz.FABProgressCircle
+         android:id="@+id/fee_fab_progress_circle"
+         android:layout_width="80dp"
+         android:layout_height="80dp"
+         android:layout_marginTop="30dp"
+         app:reusable="true"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@id/guideline">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_fee_FAB"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_marginTop="30dp"
             android:contentDescription="@string/add_members_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guideline" />-->
+            android:onClick="@{fragment::submitFees}"
+            android:backgroundTint="@color/cardView_border_green"
+            android:src="@drawable/ic_cash_payment"
+            />
+     </com.github.jorgecastilloprz.FABProgressCircle>
+
+        <com.github.jorgecastilloprz.FABProgressCircle
+            android:id="@+id/call_fab_progress_circle"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="40dp"
+            app:reusable="true"
+            app:layout_constraintEnd_toStartOf="@id/fee_fab_progress_circle"
+            app:layout_constraintTop_toBottomOf="@id/guideline">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/call_fee_FAB"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:fabCustomSize="40dp"
+                android:onClick="@{v -> fragment.callMember() }"
+                android:contentDescription="@string/add_members_description"
+                android:backgroundTint="@color/cardView_border_green"
+                android:src="@drawable/ic_baseline_call_24"
+                />
+        </com.github.jorgecastilloprz.FABProgressCircle>
+
+        <com.github.jorgecastilloprz.FABProgressCircle
+            android:id="@+id/delete_fab_progress_circle"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="40dp"
+            app:reusable="true"
+            app:layout_constraintStart_toEndOf="@id/fee_fab_progress_circle"
+            app:layout_constraintTop_toBottomOf="@id/guideline">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/delete_fee_FAB"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:fabCustomSize="40dp"
+                android:onClick="@{fragment::deleteMember}"
+                android:contentDescription="@string/add_members_description"
+                android:backgroundTint="@color/cardView_border_green"
+                android:src="@drawable/ic_baseline_delete_24"
+                />
+        </com.github.jorgecastilloprz.FABProgressCircle>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

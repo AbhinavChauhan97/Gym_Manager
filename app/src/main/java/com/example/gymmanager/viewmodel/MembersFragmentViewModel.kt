@@ -13,9 +13,4 @@ class MembersFragmentViewModel : ViewModel(){
         .setPageSize(20)
         .setPrefetchDistance(5)
         .build()
-
-
-
-
-
 }

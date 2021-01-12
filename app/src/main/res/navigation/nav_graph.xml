@@ -34,5 +34,8 @@
         <argument
             android:name="conciseMember"
             app:argType="com.example.gymmanager.model.ConciseMember" />
+        <action
+            android:id="@+id/action_memberDetailsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

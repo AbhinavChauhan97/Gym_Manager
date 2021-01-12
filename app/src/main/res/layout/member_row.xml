@@ -9,53 +9,76 @@
         <variable
             name="member"
             type="com.example.gymmanager.model.ConciseMember" />
+
+        <variable
+            name="daysLeft"
+            type="Long" />
     </data>
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@android:color/holo_blue_bright">
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp">
 
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/thumnailimage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="0.3"
-            image="@{member.image}"
-            android:src="@mipmap/ic_launcher" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@android:color/white">
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:layout_weight="0.8"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="@={member.name}"
-            android:textColor="@android:color/black" />
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/thumnailimage"
+                image="@{member.image}"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="2dp"
+                app:civ_border_width="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.2" />
 
-        <TextView
-            android:id="@+id/days"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:layout_weight="0.1"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:text="@={member.name}"
+                android:textColor="@android:color/black"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/days"
+                app:layout_constraintStart_toEndOf="@id/thumnailimage"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/arrow"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:layout_weight="0.08"
-            android:src="@drawable/ic_baseline_arrow_upward_24" />
+            <TextView
+                android:id="@+id/days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:text="@{daysLeft.toString()}"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/arrow"
+                app:layout_constraintStart_toEndOf="@id/name"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:src="@{(daysLeft > 0)? @drawable/arrow_up : @drawable/arrow_down}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
 

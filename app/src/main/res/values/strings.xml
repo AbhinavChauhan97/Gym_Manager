@@ -13,4 +13,6 @@
     <string name="phone">PHONE</string>
     <string name="address">ADDRESS</string>
     <string name="failed_adding_member">couldn\'t add member please try again </string>
+    <string name="months">MONTHS</string>
+    <string name="AMOUNT">AMOUNT</string>
 </resources>

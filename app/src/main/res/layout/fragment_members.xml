@@ -8,14 +8,14 @@
             type="com.example.gymmanager.viewmodel.MembersFragmentViewModel" />
     </data>
 
-
 <androidx.constraintlayout.widget.ConstraintLayout
      android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/members_recyclerview"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

@@ -1,30 +1,25 @@
 package com.example.gymmanager.view
 
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.media.Image
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
-import androidx.core.content.ContextCompat
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.findFragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.gymmanager.R
 import com.example.gymmanager.databinding.FragmentMemberDetailsBinding
-import com.example.gymmanager.model.MemberDetails
 import com.example.gymmanager.repository.DocumentReferenceProvider
-import com.example.gymmanager.repository.downloadMember
+import com.example.gymmanager.view.dialogs.FeeDialog
+import com.example.gymmanager.view.dialogs.SimpleConfirmationDialog
 import com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
 import com.example.gymmanager.viewmodel.MemberDetailsFragmentViewModel
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
 
@@ -42,21 +37,76 @@ class MemberDetailsFragment : Fragment(R.layout.fragment_member_details) {
         binding.fragment = this
         binding.lifecycleOwner = this
         viewModel.conciseMember = args.conciseMember
-        viewModel.viewModelScope.launch {
-            val memberDocument = downloadMember(args.conciseMember.id)
-            if(memberDocument.exists()) {
-                viewModel.memberDetails.value = memberDocument.toObject(MemberDetails::class.java)
-            }
-        }
-        val imagePresenterFragment = requireActivity().supportFragmentManager.findFragmentByTag("image_presenter") as ImagePresenterFragment
-
+        viewModel.loadMember(args.conciseMember.id)
     }
 
-    fun editPressed(validationNotifierEditText: ValidationNotifierEditText,view: View,documentReferenceProvider: DocumentReferenceProvider) {
-      ValidationNotifierEditTextAndEditButtonMediator
-          .setValidationNotifierEditText(validationNotifierEditText)
-          .setEditButton(view as MemberDetailsEditButton)
-          .newDataHolder(documentReferenceProvider)
-          .setup()
+    fun submitFees(view: View) {
+        val fab = view as FloatingActionButton
+        fab.isClickable = false
+        FeeDialog().apply {
+            doOnDialogClosed { fab.isClickable = true }
+            doOnFeeSubmit { amount, months ->
+                binding.feeFabProgressCircle.show()
+                viewModel.viewModelScope.launch {
+                    val isFeeSubmitted = viewModel.submitFees(amount, months)
+                    if (isFeeSubmitted) {
+                        binding.feeFabProgressCircle.beginFinalAnimation()
+                    } else {
+                        Toast.makeText(
+                            this@MemberDetailsFragment.requireActivity(),
+                            "fee submission failed,try again",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    binding.feeFabProgressCircle.hide()
+                    fab.isClickable = true
+                }
+            }
+        }
+        .show(requireActivity().supportFragmentManager, null)
+    }
+
+    fun deleteMember(view: View){
+
+        SimpleConfirmationDialog.
+        withText("Are you sure you want to delete this member").apply {
+            val fab = view as FloatingActionButton
+            doOnAccepted {
+                fab.isClickable = false
+                binding.deleteFabProgressCircle.show()
+                lifecycleScope.launch {
+                    val isMemberDeleted = viewModel.deleteMember()
+                    if(isMemberDeleted)
+                    {
+                        Log.d("log","navigating")
+                      val action = MemberDetailsFragmentDirections.actionMemberDetailsFragmentToMainFragment()
+                      findNavController().navigate(action)
+                    }else{
+                        Toast.makeText(
+                            this@MemberDetailsFragment.requireActivity(),
+                            "member deletion failed,try again",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }.show(requireActivity().supportFragmentManager,null)
+    }
+
+    fun callMember(){
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${viewModel.memberDetails.value?.phone}"))
+        startActivity(intent)
+    }
+
+    fun editPressed(
+        validationNotifierEditText: ValidationNotifierEditText,
+        view: View,
+        documentReferenceProvider: DocumentReferenceProvider
+    ) {
+        ValidationNotifierEditTextAndEditButtonMediator
+            .setValidationNotifierEditText(validationNotifierEditText)
+            .setEditButton(view as MemberDetailsEditButton)
+            .newDataHolder(documentReferenceProvider)
+            .setup()
     }
 }

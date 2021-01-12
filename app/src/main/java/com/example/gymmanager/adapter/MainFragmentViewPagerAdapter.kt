@@ -1,22 +1,32 @@
 package com.example.gymmanager.adapter
 
-import android.util.Log
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.arlib.floatingsearchview.FloatingSearchView
+import com.example.gymmanager.view.MembersFeeRecordsFragment
 import com.example.gymmanager.view.MembersFragment
+import java.util.*
 
-class MainFragmentViewPagerAdapter(fragment:Fragment) : FragmentStateAdapter(fragment){
+class MainFragmentViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+
+    val fragmentsList = LinkedList<Fragment>()
 
     override fun getItemCount(): Int {
-        return 1
+        return 2
     }
 
     override fun createFragment(position: Int): Fragment {
-        //Log.d("log","creating fragment")
-        return MembersFragment()
+        return when (position) {
+            0 -> {
+                val membersFragment = MembersFragment()
+                fragmentsList.add(membersFragment)
+                membersFragment
+            }
+            else ->{
+                val feeRecordFragment = MembersFeeRecordsFragment()
+                fragmentsList.add(feeRecordFragment)
+                feeRecordFragment
+            }
+        }
     }
-
 }

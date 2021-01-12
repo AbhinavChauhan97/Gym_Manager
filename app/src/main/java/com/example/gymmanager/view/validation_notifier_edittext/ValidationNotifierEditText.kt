@@ -10,15 +10,25 @@ import com.example.gymmanager.R
 import java.util.*
 
 class ValidationNotifierEditText(context: Context, attributeSet: AttributeSet? = null)
-
     : androidx.appcompat.widget.AppCompatEditText(context, attributeSet) {
 
+    private var hasBorder:Boolean
+    private var borderColor = Color.BLACK
+    set(value) {
+        field = value
+        paint?.color = value
+        invalidate()
+    }
+    private var cornerRadius:Float? = null
+    private var borderWidth:Float? = null
+    private var paint:Paint? = null
     private val validatorRegex: String?
     private val validationErrorMessage: String?
     var isValid = false
     private set
     private var validationChangeListenerList: MutableList<ValidationChangeListener> = LinkedList()
     private var previouslyMatched = false
+
 
     interface ValidationChangeListener {
         fun onBecomeValid(validationNotifierEditText: ValidationNotifierEditText)
@@ -43,8 +53,19 @@ class ValidationNotifierEditText(context: Context, attributeSet: AttributeSet? =
         validatorRegex = ta.getString(R.styleable.ValidationNotifierEditText_validatorRegex)
         validationErrorMessage =
             ta.getString(R.styleable.ValidationNotifierEditText_validationErrorMessage)
+        hasBorder = ta.getBoolean(R.styleable.ValidationNotifierEditText_giveBorder,false)
+
+        if(hasBorder){
+            borderColor = ta.getColor(R.styleable.ValidationNotifierEditText_borderColour,Color.BLACK)
+            cornerRadius = ta.getDimension(R.styleable.ValidationNotifierEditText_cornerRadius,0f)
+            borderWidth = ta.getDimension(R.styleable.ValidationNotifierEditText_borderWidth,5f)
+            paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = borderColor
+                strokeWidth = borderWidth as Float
+                style = Paint.Style.STROKE
+            }
+        }
         ta.recycle()
-        setTextColor(Color.BLACK)
         if (validatorRegex != null) {
             doOnTextChanged { text, start, before, count ->
                 super.onTextChanged(text, start, before, count)
@@ -71,11 +92,22 @@ class ValidationNotifierEditText(context: Context, attributeSet: AttributeSet? =
     }
     private  fun notifyValidity(){
         validationChangeListenerList.forEach { it.onBecomeValid(this) }
-
+        borderColor = Color.GREEN
     }
     private fun notifyInvalidity(){
         validationChangeListenerList.forEach { it.onBecomeInvalid(this) }
+        borderColor = Color.RED
+    }
 
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        if(hasBorder){
+            canvas?.drawRoundRect(0f + borderWidth!!,
+                0f + borderWidth!!,
+                width.toFloat() - borderWidth!!
+                ,height.toFloat() - borderWidth!!
+                ,cornerRadius!!,cornerRadius!!,paint!!)
+        }
     }
 
 }
