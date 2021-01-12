@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
+        android:id="@+id/months"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="@string/months"
+        android:textColor="@color/black"
+        android:gravity="center"
+        app:giveBorder="true"
+        app:borderWidth="3dp"
+        app:cornerRadius="25dp"
+        android:layout_margin="15dp"
+        app:borderColour="@color/cardView_border_red"
+        app:validatorRegex="[1-9]+"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/amount"
+
+        />
+
+    <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
+        android:id="@+id/amount"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="@string/AMOUNT"
+        android:textColor="@color/black"
+        android:gravity="center"
+        app:giveBorder="true"
+        app:cornerRadius="25dp"
+        app:borderWidth="3dp"
+        android:layout_margin="15dp"
+        app:borderColour="@color/cardView_border_red"
+        app:validatorRegex="[1-9][0-9]+"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/months"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
