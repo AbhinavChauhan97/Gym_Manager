@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/more"
-        android:title="@string/more"
-        android:icon="@drawable/ic_baseline_more_vert_24"
-        app:showAsAction="withText|always"/>
     <item android:id="@+id/search"
         android:title="@string/search"
         android:icon="@drawable/ic_baseline_search_24"
@@ -14,6 +10,15 @@
     <item android:id="@+id/sort"
         android:title="@string/sort"
         android:icon="@drawable/ic_baseline_sort_24"
-        app:showAsAction="withText|always"/>
+        app:showAsAction="withText|always">
+        <menu>
+            <group>
+                <item android:id="@+id/sort_by_name"
+                    android:title="@string/sort_by_name"/>
+                <item android:id="@+id/sort_by_fees"
+                    android:title="@string/sort_by_fees"/>
+            </group>
+        </menu>
+    </item>
 
 </menu>

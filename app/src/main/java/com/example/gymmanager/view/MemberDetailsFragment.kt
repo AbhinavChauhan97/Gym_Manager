@@ -20,6 +20,7 @@ import com.example.gymmanager.view.dialogs.SimpleConfirmationDialog
 import com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
 import com.example.gymmanager.viewmodel.MemberDetailsFragmentViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -47,55 +48,54 @@ class MemberDetailsFragment : Fragment(R.layout.fragment_member_details) {
             doOnDialogClosed { fab.isClickable = true }
             doOnFeeSubmit { amount, months ->
                 binding.feeFabProgressCircle.show()
-                viewModel.viewModelScope.launch {
+                viewModel.viewModelScope.launch(Dispatchers.Main) {
                     val isFeeSubmitted = viewModel.submitFees(amount, months)
                     if (isFeeSubmitted) {
-                        binding.feeFabProgressCircle.beginFinalAnimation()
+                        showToast("Fees Submitted")
                     } else {
-                        Toast.makeText(
-                            this@MemberDetailsFragment.requireActivity(),
-                            "fee submission failed,try again",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        showToast(null)
                     }
                     binding.feeFabProgressCircle.hide()
                     fab.isClickable = true
                 }
             }
-        }
-        .show(requireActivity().supportFragmentManager, null)
+        }.show(requireActivity().supportFragmentManager, null)
     }
 
-    fun deleteMember(view: View){
+    fun deleteMember(view: View) {
 
-        SimpleConfirmationDialog.
-        withText("Are you sure you want to delete this member").apply {
-            val fab = view as FloatingActionButton
-            doOnAccepted {
-                fab.isClickable = false
-                binding.deleteFabProgressCircle.show()
-                lifecycleScope.launch {
-                    val isMemberDeleted = viewModel.deleteMember()
-                    if(isMemberDeleted)
-                    {
-                        Log.d("log","navigating")
-                      val action = MemberDetailsFragmentDirections.actionMemberDetailsFragmentToMainFragment()
-                      findNavController().navigate(action)
-                    }else{
-                        Toast.makeText(
-                            this@MemberDetailsFragment.requireActivity(),
-                            "member deletion failed,try again",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+        val dialog =
+            SimpleConfirmationDialog.withText("Are you sure you want to delete this member");
+        val fab = view as FloatingActionButton
+        dialog.doOnAccepted {
+            fab.isClickable = false
+            binding.deleteFabProgressCircle.show()
+            viewModel.viewModelScope.launch(Dispatchers.Main) {
+                val isMemberDeleted = viewModel.deleteThisMember()
+                if (isMemberDeleted) {
+                    val action =
+                        MemberDetailsFragmentDirections.actionMemberDetailsFragmentToMainFragment()
+                    findNavController().navigate(action)
+                } else {
+                    showToast(null)
                 }
             }
-        }.show(requireActivity().supportFragmentManager,null)
+        }
+        dialog.show(requireActivity().supportFragmentManager, null)
     }
 
-    fun callMember(){
-        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${viewModel.memberDetails.value?.phone}"))
+    fun callMember() {
+        val intent =
+            Intent(Intent.ACTION_CALL, Uri.parse("tel:${viewModel.memberDetails.value?.phone}"))
         startActivity(intent)
+    }
+
+    private fun showToast(toastText: String?) {
+        Toast.makeText(
+            this@MemberDetailsFragment.requireActivity(),
+            toastText ?: "something went wrong,try again",
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     fun editPressed(

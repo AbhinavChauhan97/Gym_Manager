@@ -34,11 +34,14 @@ class MemberDetailsFragmentViewModel : ViewModel() {
          }
      }
 
-    suspend fun deleteMember():Boolean{
-        return viewModelScope.async(Dispatchers.IO){
+    suspend fun deleteThisMember():Boolean{
+        val deferred = viewModelScope.async{
             Log.d("log","deleting viemodel")
             deleteMember(conciseMember.id)
-        }.await()
+        }
+        val isDeleted = deferred.await()
+        Log.d("log",isDeleted.toString() + "deleted viewmodel")
+        return isDeleted
     }
 
     suspend fun submitFees(amount:String,months:String):Boolean{
@@ -46,7 +49,7 @@ class MemberDetailsFragmentViewModel : ViewModel() {
             name = conciseMember.name,
             image = conciseMember.image,
             amount = amount)
-        val deferredResult = viewModelScope.async {  submitMemberFees(feeRecord,months) }
-        return deferredResult.await()
+        val deferred = viewModelScope.async {  submitMemberFees(feeRecord,months) }
+        return deferred.await()
     }
 }

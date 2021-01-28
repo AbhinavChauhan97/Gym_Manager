@@ -6,6 +6,7 @@ import com.example.gymmanager.model.*
 import com.google.android.gms.tasks.Task
 import com.google.android.play.core.tasks.Tasks
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.tasks.asDeferred
@@ -82,8 +83,8 @@ suspend fun getMemberInternalFeeDocs(memberId: String): MutableList<DocumentSnap
     val task = internalCollection.get()
     task.await()
     if(task.isSuccessful) {
-        Log.d("log","sucessful")
-        task.result?.forEach { Log.d("log",it.id) }
+        //Log.d("log","sucessful")
+       // task.result?.forEach { Log.d("log",it.id) }
        return task.result?.documents
     }
     return null
@@ -107,7 +108,6 @@ suspend fun deleteMember(memberId: String):Boolean{
     val memberImageRef = getMemberImageRef(memberId)
     val task = FirebaseFirestore.getInstance()
         .runBatch {
-            Log.d("log","in the batch")
             conciseDocRef.delete()
             detailedMemberDocRef.delete()
             memberImageRef.delete()
@@ -115,7 +115,7 @@ suspend fun deleteMember(memberId: String):Boolean{
             internalFeeDocRefs?.forEach { it.delete()  }
         }
     task.await()
-    Log.d("log",task.isSuccessful.toString())
+   // Log.d("log",task.isSuccessful.toString() + " deletion completed")
     return task.isSuccessful
 }
 
@@ -163,6 +163,16 @@ fun addNewMemberDetails(memberDetails: DocumentReferenceProvider) {
     // FirebaseFirestore.getInstance().collection("d_members").document(memberDetails.id).set(memberDetails)
     memberDetails.documentReference.set(memberDetails)
 
+}
+ fun getMembers(like:String,action:(List<ConciseMember>) -> Unit){
+    getConciseMembersReference().whereEqualTo("name",like).addSnapshotListener { value, error ->
+        val mutableList = mutableListOf<ConciseMember>()
+        value?.forEach {
+           mutableList.add(it.toObject())
+        }
+        action.invoke(mutableList)
+        Log.d("log",mutableList.toString())
+    }
 }
 
 suspend fun addImageToFirebaseStorage(

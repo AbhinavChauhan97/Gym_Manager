@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
+            app:layout_constraintGuide_percent="0.45" />
 
         <com.example.gymmanager.view.BorderedCardView
             android:id="@+id/name_cardview"
@@ -150,7 +150,7 @@
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="25dp"
             app:cardElevation="15dp"
-            app:layout_constraintBottom_toTopOf="@id/guideline"
+            app:layout_constraintBottom_toTopOf="@id/date_cardview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/phone_cardview">
@@ -175,9 +175,33 @@
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
-
                     android:src="@drawable/ic_baseline_edit_24"/>
             </LinearLayout>
+        </com.example.gymmanager.view.BorderedCardView>
+
+        <com.example.gymmanager.view.BorderedCardView
+            android:id="@+id/date_cardview"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="15dp"
+            app:layout_constraintBottom_toTopOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/address_cardview">
+
+            <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
+                android:id="@+id/joining_date"
+                android:text="@={viewModel.memberDetails.address}"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:textColor="@color/black"
+                android:enabled="false"
+                android:layout_marginStart="5dp"/>
+
         </com.example.gymmanager.view.BorderedCardView>
 
 
@@ -186,13 +210,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
+            app:layout_constraintGuide_percent="0.85" />
 
      <com.github.jorgecastilloprz.FABProgressCircle
          android:id="@+id/fee_fab_progress_circle"
          android:layout_width="80dp"
          android:layout_height="80dp"
-         android:layout_marginTop="30dp"
          app:reusable="true"
          app:layout_constraintEnd_toEndOf="parent"
          app:layout_constraintStart_toStartOf="parent"
@@ -212,7 +235,7 @@
             android:id="@+id/call_fab_progress_circle"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             app:reusable="true"
             app:layout_constraintEnd_toStartOf="@id/fee_fab_progress_circle"
             app:layout_constraintTop_toBottomOf="@id/guideline">
@@ -233,7 +256,7 @@
             android:id="@+id/delete_fab_progress_circle"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             app:reusable="true"
             app:layout_constraintStart_toEndOf="@id/fee_fab_progress_circle"
             app:layout_constraintTop_toBottomOf="@id/guideline">

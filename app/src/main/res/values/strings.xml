@@ -15,4 +15,6 @@
     <string name="failed_adding_member">couldn\'t add member please try again </string>
     <string name="months">MONTHS</string>
     <string name="AMOUNT">AMOUNT</string>
+    <string name="sort_by_name">Sort By Name</string>
+    <string name="sort_by_fees">Sort By Fees</string>
 </resources>

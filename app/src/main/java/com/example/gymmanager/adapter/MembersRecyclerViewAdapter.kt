@@ -1,5 +1,6 @@
 package com.example.gymmanager.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -25,6 +26,7 @@ class MembersRecyclerViewAdapter(options: FirestorePagingOptions<ConciseMember>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, conciseMember: ConciseMember) {
+        //Log.d("log", "onBindViewHolder:$conciseMember ")
         holder.bind(conciseMember)
     }
 
