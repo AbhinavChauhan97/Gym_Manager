@@ -6,6 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
 import com.arlib.floatingsearchview.FloatingSearchView
 import com.example.gymmanager.model.ConciseMember
+import com.example.gymmanager.view.MainFragment
 import com.example.gymmanager.view.MembersFeeRecordsFragment
 import com.example.gymmanager.view.MembersFragment
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
@@ -15,23 +16,12 @@ import java.util.*
 class MainFragmentViewPagerAdapter(val fragment: Fragment) : FragmentStateAdapter(fragment) {
 
 
-    interface SearchSupporter{
-        fun search(query:String)
-    }
-
-    fun showInCurrentFragment(memberName:String,currentFragmentIndex:Int){
-       val  currentFragment = fragment.childFragmentManager.findFragmentByTag("f$currentFragmentIndex")
-        if(currentFragment is SearchSupporter){
-            currentFragment.search(memberName)
-        }
-    }
-
     override fun getItemCount(): Int {
         return 2
     }
 
-
     override fun createFragment(position: Int): Fragment {
+
 
         return when (position) {
             0 -> {

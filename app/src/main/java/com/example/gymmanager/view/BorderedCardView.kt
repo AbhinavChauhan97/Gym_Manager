@@ -32,8 +32,8 @@ class BorderedCardView(context: Context, attributeSet: AttributeSet? = null) : C
    }
 
     override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
         canvas?.drawRoundRect(0f,0f,width.toFloat(),height.toFloat(),radius,radius,paint)
+        super.onDraw(canvas)
     }
 
     override fun onBecomeValid(validationNotifierEditText: ValidationNotifierEditText) {

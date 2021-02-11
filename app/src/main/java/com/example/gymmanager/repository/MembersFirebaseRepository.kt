@@ -4,7 +4,7 @@ import android.net.Uri
 import android.util.Log
 import com.example.gymmanager.model.*
 import com.google.android.gms.tasks.Task
-import com.google.android.play.core.tasks.Tasks
+
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
@@ -17,8 +17,17 @@ import java.io.File
 interface DocumentReferenceProvider {
     val documentReference: DocumentReference
 }
+
+/**
+ * @return the reference to the collection pointing the c_members collection
+ */
 fun getConciseMembersReference() = FirebaseFirestore.getInstance().collection("c_members")
 
+/**
+ * returns the documents reference to a member from c_members collection
+ * @param memberId the id of the member
+ * @return reference to the document of given member from c_members collection
+ */
 fun getConciseMemberDoc(memberId:String) = getConciseMembersReference().document(memberId)
 
 fun getDetailedMembersReference() = FirebaseFirestore.getInstance().collection("d_members")
@@ -76,6 +85,16 @@ suspend fun downloadImage(imageName: String, downloadDestinationFile: File): Boo
         .getFile(downloadDestinationFile)
     downloadTask.await()
     return downloadTask.isSuccessful
+}
+
+suspend fun getImageUrl(imageName: String): Uri? {
+    Log.d("log","getting url")
+    val downloadTask = FirebaseStorage.getInstance()
+        .getReference(imageName)
+        .downloadUrl
+    Log.d("log",downloadTask.toString())
+    val uri = downloadTask.await()
+    return if(downloadTask.isSuccessful) uri else null
 }
 
 suspend fun getMemberInternalFeeDocs(memberId: String): MutableList<DocumentSnapshot>?{
@@ -184,4 +203,8 @@ suspend fun addImageToFirebaseStorage(
         .getReference(imageName)
         .putBytes(byteArray)
         .await()
+}
+
+fun updateMemberDetailsField(documentReference: DocumentReference,field:String,newValue:Any){
+    documentReference.update(field,newValue)
 }

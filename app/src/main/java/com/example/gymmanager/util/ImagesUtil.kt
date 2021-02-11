@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import androidx.core.content.FileProvider
+import com.example.gymmanager.MyApplication
 import com.example.gymmanager.repository.addImageToFirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -15,17 +16,16 @@ import kotlinx.coroutines.withContext
 
 import java.io.*
 
-lateinit var imageArray: ByteArray
-lateinit var appContext: Context
 
-fun imagesDirectory(): File = appContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+
+fun imagesDirectory(): File = MyApplication.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
 
 fun createUriForImageFile(name: String): Uri {
     val picturesDirectory = imagesDirectory()
     val imageFile = File(picturesDirectory, name)
     return FileProvider.getUriForFile(
-        appContext,
-        "${appContext.packageName}.android.fileprovider",
+         MyApplication.context,
+        "${MyApplication.context.packageName}.android.fileprovider",
         imageFile
     )
 }
@@ -69,7 +69,7 @@ suspend fun uploadImage(imageName: String,byteArray : ByteArray): Boolean {
 suspend fun deleteImage(imageName: String) {
     return withContext(Dispatchers.IO) {
         val imageFilePath =
-            appContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath + "/" + imageName
+            MyApplication.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath + "/" + imageName
         File(imageFilePath).delete()
     }
 }

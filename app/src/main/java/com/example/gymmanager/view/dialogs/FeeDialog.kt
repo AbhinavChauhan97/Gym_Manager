@@ -24,7 +24,7 @@ class FeeDialog : DialogFragment() {
         super.onCreateDialog(savedInstanceState)
 
         val binding = DialogFeeBinding.inflate(LayoutInflater.from(requireActivity()))
-        val dialog = AlertDialog.Builder(requireActivity(),R.style.MyAlterDialog)
+        val dialog = AlertDialog.Builder(requireActivity())
             .setView(binding.root)
             .setCustomTitle(LayoutInflater.from(context).inflate(R.layout.title_fee_dialog,null))
             .setPositiveButton("SUBMIT") { _, _ ->

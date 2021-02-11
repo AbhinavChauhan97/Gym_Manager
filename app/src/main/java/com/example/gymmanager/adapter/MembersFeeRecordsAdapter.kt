@@ -26,7 +26,6 @@ class MembersFeeRecordsAdapter(options: FirestorePagingOptions<FeeRecord>) :
     class ViewHolder(private val rowBinding: FeeRowBinding) :
         RecyclerView.ViewHolder(rowBinding.root) {
         fun bind(feeRecord: FeeRecord) {
-            feeRecord.apply {  }
             rowBinding.feeRecord = feeRecord
             rowBinding.executePendingBindings()
         }

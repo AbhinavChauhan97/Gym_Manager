@@ -1,11 +1,14 @@
 package com.example.gymmanager.view
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.gymmanager.R
 import com.example.gymmanager.databinding.FragmentMemberDetailsBinding
 import com.example.gymmanager.repository.DocumentReferenceProvider
+import com.example.gymmanager.repository.updateMemberDetailsField
 import com.example.gymmanager.view.dialogs.FeeDialog
 import com.example.gymmanager.view.dialogs.SimpleConfirmationDialog
 import com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
@@ -39,6 +43,10 @@ class MemberDetailsFragment : Fragment(R.layout.fragment_member_details) {
         binding.lifecycleOwner = this
         viewModel.conciseMember = args.conciseMember
         viewModel.loadMember(args.conciseMember.id)
+        binding.name.addValidationChangeListener(binding.nameCardview)
+        binding.phone.addValidationChangeListener(binding.phoneCardview)
+        binding.address.addValidationChangeListener(binding.addressCardview)
+        binding.joiningDate.addValidationChangeListener(binding.dateCardview)
     }
 
     fun submitFees(view: View) {
@@ -101,12 +109,31 @@ class MemberDetailsFragment : Fragment(R.layout.fragment_member_details) {
     fun editPressed(
         validationNotifierEditText: ValidationNotifierEditText,
         view: View,
-        documentReferenceProvider: DocumentReferenceProvider
+        documentReferenceProvider: DocumentReferenceProvider,
+        fieldName:String
     ) {
-        ValidationNotifierEditTextAndEditButtonMediator
-            .setValidationNotifierEditText(validationNotifierEditText)
-            .setEditButton(view as MemberDetailsEditButton)
-            .newDataHolder(documentReferenceProvider)
-            .setup()
+       val editButton = view as ImageButton
+       val pencilSrc = ContextCompat.getDrawable(requireActivity(),R.drawable.ic_baseline_edit_black_20)
+       val crossSrc = ContextCompat.getDrawable(requireActivity(),R.drawable.ic_baseline_clear_red_20)
+       val checkSrc = ContextCompat.getDrawable(requireActivity(),R.drawable.ic_baseline_check_green_20)
+       if(validationNotifierEditText.isEnabled){
+           if(validationNotifierEditText.isValid){
+               updateMemberDetailsField(documentReferenceProvider.documentReference,fieldName,validationNotifierEditText.text.toString())
+               validationNotifierEditText.isEnabled = false
+               editButton.setImageDrawable(pencilSrc)
+           }
+       }else{
+           validationNotifierEditText.isEnabled = true
+           validationNotifierEditText.addValidationChangeListener(object : ValidationNotifierEditText.ValidationChangeListener{
+               override fun onBecomeValid(validationNotifierEditText: ValidationNotifierEditText) {
+                   editButton.setImageDrawable(checkSrc)
+               }
+               override fun onBecomeInvalid(validationNotifierEditText: ValidationNotifierEditText) {
+                   editButton.setImageDrawable(crossSrc)
+               }
+           })
+           validationNotifierEditText.requestFocus()
+           editButton.setImageDrawable(checkSrc)
+       }
     }
 }

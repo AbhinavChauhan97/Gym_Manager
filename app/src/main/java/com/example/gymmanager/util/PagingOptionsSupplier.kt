@@ -13,15 +13,14 @@ class PagingOptionsSupplier<T> constructor(
     private val lifecycleOwner: LifecycleOwner,
     private val modelClass: Class<T>
 ) {
-    var query: Query? = null
     var initialLoadSize = 10
     var prefetchDistance = 5
     var placeHolders = false
     var pageSize = 10
-    private var options: FirestorePagingOptions<T>? = null
+    lateinit var options: FirestorePagingOptions<T>
 
 
-    fun getPagingOptions(): FirestorePagingOptions<T> {
+    fun getPagingOptions(query: Query): FirestorePagingOptions<T> {
         val pagedListConfig = PagedList.Config.Builder()
             .setEnablePlaceholders(placeHolders)
             .setPageSize(pageSize)
@@ -29,16 +28,12 @@ class PagingOptionsSupplier<T> constructor(
             .setInitialLoadSizeHint(initialLoadSize)
             .build()
 
-        options = query?.let {
+        options = query.let {
             FirestorePagingOptions.Builder<T>()
                 .setQuery(it, pagedListConfig, modelClass)
                 .setLifecycleOwner(lifecycleOwner)
                 .build()
         }
-
-        if (options == null) {
-            throw IllegalStateException("query is not supplied, query field of this object is null can't supply options without query")
-        }
-        return options!!
+        return options
     }
 }

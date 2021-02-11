@@ -3,10 +3,12 @@ package com.example.gymmanager.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import com.example.gymmanager.repository.getConciseMembersReference
+import com.google.firebase.firestore.DocumentSnapshot
 
 class MembersFragmentViewModel : ViewModel(){
 
-    val baseQuery = getConciseMembersReference().orderBy("name")
+    var currentList:PagedList<DocumentSnapshot>? = null
+    var baseQuery = getConciseMembersReference().orderBy("name")
     val pagedListConfig: PagedList.Config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
         .setInitialLoadSizeHint(20)

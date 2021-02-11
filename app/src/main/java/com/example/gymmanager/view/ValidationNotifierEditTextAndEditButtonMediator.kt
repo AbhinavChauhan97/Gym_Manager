@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.gymmanager.R
 import com.example.gymmanager.repository.DocumentReferenceProvider
-import com.example.gymmanager.util.appContext
+
 import com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.SetOptions

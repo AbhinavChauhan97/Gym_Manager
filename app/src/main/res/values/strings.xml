@@ -17,4 +17,5 @@
     <string name="AMOUNT">AMOUNT</string>
     <string name="sort_by_name">Sort By Name</string>
     <string name="sort_by_fees">Sort By Fees</string>
+    <string name="sort_by_date">Sort By Date</string>
 </resources>

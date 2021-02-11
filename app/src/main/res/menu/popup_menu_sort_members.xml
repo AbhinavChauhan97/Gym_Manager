@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/sort"
-        android:title="@string/sort"
-        android:icon="@drawable/ic_baseline_sort_24"
-        app:showAsAction="always">
-        <menu>
             <group
                 android:id="@+id/sort_grp"
                 android:checkableBehavior="single">
@@ -15,7 +10,5 @@
                 <item android:id="@+id/sort_by_fees"
                     android:title="@string/sort_by_fees"/>
             </group>
-        </menu>
-    </item>
 
 </menu>

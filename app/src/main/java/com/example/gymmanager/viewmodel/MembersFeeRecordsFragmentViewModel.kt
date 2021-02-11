@@ -6,7 +6,7 @@ import com.example.gymmanager.repository.getALlMembersFeeReference
 
 class MembersFeeRecordsFragmentViewModel : ViewModel() {
 
-    val baseQuery = getALlMembersFeeReference().orderBy("year")
+    var baseQuery = getALlMembersFeeReference().orderBy("year")
     val pagedListConfig: PagedList.Config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
         .setInitialLoadSizeHint(20)

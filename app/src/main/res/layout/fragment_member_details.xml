@@ -86,14 +86,16 @@
                     app:validationErrorMessage="invalid input"
                     app:validatorRegex="[a-zA-Z]+" />
 
-                <com.example.gymmanager.view.MemberDetailsEditButton
+                <ImageButton
                     android:id="@+id/name_edit_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
-
-                    android:src="@drawable/ic_baseline_edit_24"
+                    android:saveEnabled="true"
+                    android:onClick="@{v -> fragment.editPressed(name,v,viewModel.conciseMember,`name`)}"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/ic_baseline_edit_black_20"
                     />
             </LinearLayout>
         </com.example.gymmanager.view.BorderedCardView>
@@ -129,14 +131,15 @@
                     app:layout_constraintTop_toBottomOf="@id/name"
                     app:validatorRegex="[7-9][0-9]{9}" />
 
-                <com.example.gymmanager.view.MemberDetailsEditButton
+                <ImageButton
                     android:id="@+id/phone_edit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
-
-                    android:src="@drawable/ic_baseline_edit_24"/>
+                    android:onClick="@{v -> fragment.editPressed(phone,v,viewModel.memberDetails,`phone`)}"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/ic_baseline_edit_black_20"/>
             </LinearLayout>
         </com.example.gymmanager.view.BorderedCardView>
 
@@ -167,15 +170,18 @@
                     android:layout_height="50dp"
                     android:textColor="@color/black"
                     android:enabled="false"
+                    app:validatorRegex=".+"
                     android:layout_marginStart="5dp"
                     android:layout_weight="0.9" />
-                <com.example.gymmanager.view.MemberDetailsEditButton
+                <ImageButton
                     android:id="@+id/address_edit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
-                    android:src="@drawable/ic_baseline_edit_24"/>
+                    android:backgroundTint="@color/white"
+                    android:onClick="@{v -> fragment.editPressed(address,v,viewModel.memberDetails,`address`)}"
+                    android:src="@drawable/ic_baseline_edit_black_20"/>
             </LinearLayout>
         </com.example.gymmanager.view.BorderedCardView>
 
@@ -195,9 +201,10 @@
 
             <com.example.gymmanager.view.validation_notifier_edittext.ValidationNotifierEditText
                 android:id="@+id/joining_date"
-                android:text="@={viewModel.memberDetails.address}"
-                android:layout_width="0dp"
+                android:text="@{String.valueOf(viewModel.conciseMember.day) + `-`+ String.valueOf(viewModel.conciseMember.month) + `-`+ String.valueOf(viewModel.conciseMember.year)}"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
+                app:validatorRegex=".+"
                 android:textColor="@color/black"
                 android:enabled="false"
                 android:layout_marginStart="5dp"/>
@@ -226,7 +233,7 @@
             android:layout_height="56dp"
             android:contentDescription="@string/add_members_description"
             android:onClick="@{fragment::submitFees}"
-            android:backgroundTint="@color/cardView_border_green"
+            android:backgroundTint="@color/accent"
             android:src="@drawable/ic_cash_payment"
             />
      </com.github.jorgecastilloprz.FABProgressCircle>
@@ -247,7 +254,7 @@
                 app:fabCustomSize="40dp"
                 android:onClick="@{v -> fragment.callMember() }"
                 android:contentDescription="@string/add_members_description"
-                android:backgroundTint="@color/cardView_border_green"
+                android:backgroundTint="@color/accent"
                 android:src="@drawable/ic_baseline_call_24"
                 />
         </com.github.jorgecastilloprz.FABProgressCircle>
@@ -268,7 +275,7 @@
                 app:fabCustomSize="40dp"
                 android:onClick="@{fragment::deleteMember}"
                 android:contentDescription="@string/add_members_description"
-                android:backgroundTint="@color/cardView_border_green"
+                android:backgroundTint="@color/accent"
                 android:src="@drawable/ic_baseline_delete_24"
                 />
         </com.github.jorgecastilloprz.FABProgressCircle>
